@@ -11,7 +11,7 @@ It's a dmenu script that helps you to connect your external monitor/tv/video pro
 
 3: Edit these 4 lines. 
 
-![image](https://user-images.githubusercontent.com/88589756/169661028-d7d3e300-e415-4fe2-bd06-b9a385cfe9d9.png)
+![image](https://user-images.githubusercontent.com/88589756/171921679-ec63adbe-da52-493c-bb5f-95f79efe48b3.png)
 
 You don't know what you should type there? Connect your external monitor, open the terminal and then type `xrandr`. It would show something like this:
 
@@ -23,7 +23,7 @@ According to this, you'll find everything you need:
 
 Like that: 
 
-![image](https://user-images.githubusercontent.com/88589756/169661308-9525d293-5a24-44d6-88b9-80bf130614b8.png)
+![image](https://user-images.githubusercontent.com/88589756/171921761-e50f2a14-2b21-4640-823d-09ed84ae784f.png)
 
 4: Save the file, and `chmod +x ./ddisplay` and `doas (sudo) cp ./ddisplay /bin/ddisplay`
 
