@@ -2,8 +2,9 @@
 # ddisplay - connecting to your monitor is now easier ;)
 
 ############################### SETTINGS (EDIT THEM) ##############################################
+# You can also change these in ~/.config/ddisplay/ddisplayrc if you prefer.
 PRIMARY="HERE"       # Choose your correct primary display (use xrandr for more info)
-SECONDARY="HERE"     # Choose your connected display (again, xrandr for more info))
+SECONDARY="HERE"     # Choose your connected display (use xrandr for more info)
 RESOLUTION="HERE"    # Your native resolution for the primary display (ie. 1920x1080)
 REFRESH="HERE"       # Your native refresh rate for the primary display (ie. 60)
 ###################################################################################################
@@ -12,6 +13,19 @@ REFRESH="HERE"       # Your native refresh rate for the primary display (ie. 60)
 case "$RUNLAUNCHER" in
 "") RUNLAUNCHER=dmenu ;;
 esac
+
+DOTDIR=$HOME/.config/ddisplay
+
+if [ -e "$DOTDIR/ddisplayrc" ]; then
+	. $DOTDIR/ddisplayrc
+else
+	mkdir -p $DOTDIR
+	printf "PRIMARY=$PRIMARY # Choose your correct primary display (use xrandr for more info)" > $DOTDIR/ddisplayrc
+	printf "\nSECONDARY=$SECONDARY # Choose your connected display (use xrandr for more info)" >> $DOTDIR/ddisplayrc
+	printf "\nRESOLUTION=$RESOLUTION # Your native resolution for the primary display (ie. 1920x1080)" >> $DOTDIR/ddisplayrc
+	printf "\nREFRESH=$REFRESH # Your native refresh rate for the primary display (ie. 60)" >> $DOTDIR/ddisplayrc
+	. $DOTDIR/ddisplayrc
+fi
 
 # Custom resolution
 CUSTOMRES() {
