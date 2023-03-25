@@ -10,9 +10,7 @@ REFRESH="HERE"       # Your native refresh rate for the primary display (ie. 60)
 ###################################################################################################
 
 # You can switch run launcher to something like rofi by exporting RUNLAUNCHER to whatever run launcher you want to use.
-case "$RUNLAUNCHER" in
-"") RUNLAUNCHER=dmenu ;;
-esac
+[ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=dmenu
 
 DOTDIR=$HOME/.config/ddisplay
 
