@@ -1,24 +1,41 @@
 #!/bin/sh
-# ddisplay - connectivity to your monitor it's now easier ;)
+# ddisplay - connecting to your monitor is now easier ;)
 
 ############################### SETTINGS (EDIT THEM) ##############################################
+# You can also change these in ~/.config/ddisplay/ddisplayrc if you prefer.
 PRIMARY="HERE"       # Choose your correct primary display (use xrandr for more info)
-SECONDARY="HERE"     # Choose your connected display (again, xrandr for more info))
+SECONDARY="HERE"     # Choose your connected display (use xrandr for more info)
 RESOLUTION="HERE"    # Your native resolution for the primary display (ie. 1920x1080)
 REFRESH="HERE"       # Your native refresh rate for the primary display (ie. 60)
 ###################################################################################################
 
+# You can switch run launcher to something like rofi by exporting RUNLAUNCHER to whatever run launcher you want to use.
+[ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=dmenu
+
+DOTDIR=$HOME/.config/ddisplay
+
+if [ -e "$DOTDIR/ddisplayrc" ]; then
+	. $DOTDIR/ddisplayrc
+else
+	mkdir -p $DOTDIR
+	printf "PRIMARY=$PRIMARY # Choose your correct primary display (use xrandr for more info)" > $DOTDIR/ddisplayrc
+	printf "\nSECONDARY=$SECONDARY # Choose your connected display (use xrandr for more info)" >> $DOTDIR/ddisplayrc
+	printf "\nRESOLUTION=$RESOLUTION # Your native resolution for the primary display (ie. 1920x1080)" >> $DOTDIR/ddisplayrc
+	printf "\nREFRESH=$REFRESH # Your native refresh rate for the primary display (ie. 60)" >> $DOTDIR/ddisplayrc
+	. $DOTDIR/ddisplayrc
+fi
+
 # Custom resolution
 CUSTOMRES() {
-	CRES=$(printf '             ' | dmenu -b -l 0 -p 'Enter a resolution (ie. 1920x1080): ')
-	CREF=$(printf '      ' | dmenu -b -l 0 -p 'Enter a refresh rate (ie. 60): ')
+	CRES=$(printf '             ' | $RUNLAUNCHER -b -l 0 -p 'Enter a resolution (ie. 1920x1080): ')
+	CREF=$(printf '      ' | $RUNLAUNCHER -b -l 0 -p 'Enter a refresh rate (ie. 60): ')
 	xrandr --output $PRIMARY --rate $CREF --mode $CRES --fb $CRES --panning $CRES --output $SECONDARY --rate $CREF --mode $CRES --same-as $PRIMARY
 }
 
 # Mirror resolutions
 MIRROR() {
 	# Asking for the resolution
-	MIRROR=$(printf "4K UHD\n1080p\n720p\n480p\nCustom Resolution\nExit" | dmenu -b -l 6 -p "Choose the resolution.")
+	MIRROR=$(printf "4K UHD\n1080p\n720p\n480p\nCustom Resolution\nExit" | $RUNLAUNCHER -b -l 6 -p "Choose the resolution.")
 
 	case "$MIRROR" in
 		"4K UHD") xrandr --output $PRIMARY --rate 60 --mode 3840×2160 --fb 3840×2160 --panning 3840×2160 --output $SECONDARY --rate 60 --mode 3840×2160 --same-as $PRIMARY ;;
@@ -31,7 +48,7 @@ esac
 }
 
 # Asking what you want to do
-ACTION=$(printf "Mirror\nExternal\nDisconnect\nExit" | dmenu -b -l 5 -p "What do you want to do with your cool monitor?")
+ACTION=$(printf "Mirror\nExternal\nDisconnect\nExit" | $RUNLAUNCHER -b -l 5 -p "What do you want to do with your monitor?")
 
 case "$ACTION" in
 	"Mirror") MIRROR ;;
